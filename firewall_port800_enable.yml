@@ -1,0 +1,48 @@
+---
+- name: Enable port 800/tcp
+  hosts: linux_servers
+  become: false
+
+  tasks:
+    - name: Check the current status of Firewalld
+      systemd:
+        name: firewalld
+      register: firewalld_initial_status
+
+    - name: Print initial status of Firewalld
+      debug:
+        msg: "Firewall is {{ firewalld_initial_status.status.ActiveState }} on {{ inventory_hostname }}"
+
+    - name: if firewall is stopped, start it
+      systemd:
+        name: firewalld
+        state: started
+
+    - name: Check Status of the firewalld after starting
+      systemd:
+        name: firewalld
+      register: firewalld_after_status
+
+    - name: Print Status of the firewalld after starting
+      debug:
+        msg: "Firewall is {{ firewalld_after_status.status.ActiveState }} on {{ inventory_hostname }}"
+
+    - name: Now Enabling port 800/tcp
+      firewalld:
+        port: 800/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: reload firewall
+      systemd:
+        name: firewalld
+        state: restarted
+
+    - name: Verify the firewall open ports
+      command: firewall-cmd --list-ports
+      register: open_ports
+
+    - name: Print Open port details
+      debug:
+        msg: " Open ports are {{ open_ports.stdout }} on {{ inventory_hostname }}"
