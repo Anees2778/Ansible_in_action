@@ -1,0 +1,35 @@
+---
+- name: Configuring Pre-login Warning Banner
+  hosts: linux_servers
+  become: true
+
+  tasks:
+    - name: Configure SSH login banner
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Banner'
+        line: 'Banner /etc/issue'
+        state: present
+        backup: yes
+      notify: Restart SSH
+
+    - name: Set /etc/issue banner
+      copy:
+        dest: /etc/issue
+        content: |
+          ************************************************************
+          * WARNING: Authorized access only                         *
+          *                                                          *
+          * This system is for authorized users only.                *
+          * All activities are monitored and logged.                 *
+          * Unauthorized access is strictly prohibited.              *
+          ************************************************************
+        owner: root
+        group: root
+        mode: '0644'
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
