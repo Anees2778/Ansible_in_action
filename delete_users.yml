@@ -1,0 +1,21 @@
+---
+- name: Delete the users
+  hosts: linux_servers
+  become: true
+
+  vars:
+    users_to_delete:
+      - anees
+
+  tasks:
+    - name: Kill user Processes
+      command: pkill -u "{{ item }}"
+      loop: "{{ users_to_delete }}"
+      ignore_errors: yes
+
+    - name: delete User and home directories
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      loop: "{{ users_to_delete }}"
