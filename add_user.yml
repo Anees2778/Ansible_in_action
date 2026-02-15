@@ -1,0 +1,19 @@
+---
+- name: User Onboarding with sudo previlige
+  hosts: linux_servers
+  become: true
+
+  tasks:
+    - name: Create user
+      user:
+        name: anees
+        group: "wheel"
+        uid: 2501
+        shell: /bin/bash
+        create_home: yes
+        password: "{{ 'password' | password_hash('sha512') }}"
+        state: present
+
+    - name: Pring msg User is created
+      debug:
+        msg: "User is created on server {{ inventory_hostname }}"
