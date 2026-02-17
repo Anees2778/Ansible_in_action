@@ -42,3 +42,88 @@
         line: "{{ report_content }}"
         create: yes
         insertafter: EOF
+
+
+
+
+
+
+
+
+
+OUTPUT ===========>
+
+=============================================================
+=================== System Health Report ====================
+=============================================================
+Hostname: "192.168.56.105"
+------------------------------------
+------------------------------------
+Uptime :-
+" 10:03:33 up  1:16,  2 users,  load average: 0.31, 0.19, 0.11"
+-------------------------------------------------------------
+Free Memory :-
+"              total        used        free      shared  buff/cache   available
+Mem:           1778         315         559           8         903        1293
+Swap:          1023           0        1023"
+-------------------------------------------------------------
+Disk Utilisation :-
+"Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        871M     0  871M   0% /dev
+tmpfs           890M  128K  890M   1% /dev/shm
+tmpfs           890M  8.6M  881M   1% /run
+tmpfs           890M     0  890M   0% /sys/fs/cgroup
+/dev/sda1        19G  4.1G   14G  23% /
+/dev/sr1         12G   12G     0 100% /mnt/cdrom
+tmpfs           178M     0  178M   0% /run/user/0"
+
+=============================================================
+=================== System Health Report ====================
+=============================================================
+Hostname: "192.168.56.104"
+------------------------------------
+------------------------------------
+Uptime :-
+" 10:03:32 up  1:16,  2 users,  load average: 0.00, 0.01, 0.00"
+-------------------------------------------------------------
+Free Memory :-
+"              total        used        free      shared  buff/cache   available
+Mem:           1725         124        1216           0         384        1437
+Swap:          1023           0        1023"
+-------------------------------------------------------------
+Disk Utilisation :-
+"Filesystem                Size  Used Avail Use% Mounted on
+devtmpfs                  846M     0  846M   0% /dev
+tmpfs                     863M     0  863M   0% /dev/shm
+tmpfs                     863M  620K  863M   1% /run
+tmpfs                     863M     0  863M   0% /sys/fs/cgroup
+/dev/sda1                  19G  6.7G   12G  38% /
+/dev/mapper/vg_00-var_lv   99G   61M   94G   1% /my_var
+/dev/mapper/vg_00-tmp     394G   73M  374G   1% /tmp
+/dev/sr1                  8.6G  8.6G     0 100% /mnt/cdrom
+tmpfs                     173M     0  173M   0% /run/user/0"
+
+=============================================================
+=================== System Health Report ====================
+=============================================================
+Hostname: "192.168.56.106"
+------------------------------------
+------------------------------------
+Uptime :-
+" 10:03:33 up  1:16,  2 users,  load average: 0.41, 0.10, 0.03"
+-------------------------------------------------------------
+Free Memory :-
+"              total        used        free      shared  buff/cache   available
+Mem:           1778         136         649           8         993        1604
+Swap:          1023           0        1023"
+-------------------------------------------------------------
+Disk Utilisation :-
+"Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        871M     0  871M   0% /dev
+tmpfs           890M     0  890M   0% /dev/shm
+tmpfs           890M  8.5M  881M   1% /run
+tmpfs           890M     0  890M   0% /sys/fs/cgroup
+/dev/sda1        19G   16G  2.3G  88% /
+tmpfs           178M     0  178M   0% /run/user/0
+/dev/sr1         12G   12G     0 100% /mnt/cdrom"
+
