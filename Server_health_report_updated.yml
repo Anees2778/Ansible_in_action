@@ -1,0 +1,223 @@
+---
+- name: Mazor health report of the server
+  hosts: all
+  become: true
+
+  tasks:
+    - name: System Uptime
+      command: "uptime"
+      register: system_uptime
+
+    - name: CPU Utilization
+      command: "mpstat"
+      register: cpu_utilization
+
+    - name: Memory utilization
+      command: "free -m"
+      register: memory_utilization
+
+    - name: Disk space Utilization
+      command: "df -h"
+      register: disk_space_utilization
+
+    - name: Working Gateways
+      command: "netstat -nr"
+      register: active_gateways
+
+    - name: Connected Devices
+      command: "lsblk"
+      register: devices
+
+    - name: Create content
+      set_fact:
+        output_content: |
+          =============================================================================
+          *                                                                           *
+          *                            Server Health Report                           *
+          *                                                                           *
+          =============================================================================
+          Hostname : " {{ inventory_hostname }} "
+          OS Type : "{{ ansible_os_family }}"
+          =============================================================================
+          Sysyem Uptime :
+          {{ system_uptime.stdout }}
+
+          CUP Utiliztion :
+          {{ cpu_utilization.stdout }}
+
+          Memory Utilization :
+          {{ memory_utilization.stdout }}
+
+          Disk Space Utilization :
+          {{ disk_space_utilization.stdout }}
+
+          Active Gateways:
+          {{ active_gateways.stdout }}
+
+          Attached Devices :
+          {{ devices.stdout }}
+          =============================================================================
+
+
+    - name: Creating Output file
+      delegate_to: localhost
+      run_once: false
+      lineinfile:
+        path: "./Health_Report/major_report_{{ ansible_date_time.date }}.txt"
+        line: "{{ output_content }}"
+        create: yes
+        insertafter: EOF
+
+
+
+
+
+=============================================================================
+*                                                                           *
+*                            Server Health Report                           *
+*                                                                           *
+=============================================================================
+Hostname : " 192.168.56.105 "
+OS Type : "RedHat"
+=============================================================================
+Sysyem Uptime :
+ 17:24:40 up  6:20,  3 users,  load average: 0.71, 0.28, 0.24
+
+CUP Utiliztion :
+Linux 4.18.0-477.10.1.el8_8.x86_64 (LINUX.myguest.virtualbox.org)       02/19/2026      _x86_64_        (1 CPU)
+
+05:24:42 PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+05:24:42 PM  all    1.22    0.31    0.58    0.10    0.18    0.08    0.00    0.00    0.00   97.54
+
+Memory Utilization :
+              total        used        free      shared  buff/cache   available
+Mem:           1778         299         572          27         905        1282
+Swap:          1023           0        1023
+
+Disk Space Utilization :
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        871M     0  871M   0% /dev
+tmpfs           890M  128K  890M   1% /dev/shm
+tmpfs           890M   28M  862M   4% /run
+tmpfs           890M     0  890M   0% /sys/fs/cgroup
+/dev/sda1        19G  4.1G   14G  23% /
+/dev/sr1         12G   12G     0 100% /mnt/cdrom
+tmpfs           178M     0  178M   0% /run/user/0
+
+Active Gateways:
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         10.0.2.2        0.0.0.0         UG        0 0          0 enp0s3
+10.0.2.0        0.0.0.0         255.255.255.0   U         0 0          0 enp0s3
+192.168.56.0    0.0.0.0         255.255.255.0   U         0 0          0 enp0s8
+
+Attached Devices :
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk
+├─sda1   8:1    0   19G  0 part /
+└─sda2   8:2    0    1G  0 part [SWAP]
+sr0     11:0    1 1024M  0 rom
+sr1     11:1    1 11.7G  0 rom  /mnt/cdrom
+=============================================================================
+
+=============================================================================
+*                                                                           *
+*                            Server Health Report                           *
+*                                                                           *
+=============================================================================
+Hostname : " 192.168.56.104 "
+OS Type : "RedHat"
+=============================================================================
+Sysyem Uptime :
+ 17:24:50 up  6:20,  1 user,  load average: 0.07, 0.03, 0.03
+
+CUP Utiliztion :
+Linux 4.14.35-1902.300.11.el7uek.x86_64 (PRServer)      02/19/2026      _x86_64_        (1 CPU)
+
+05:24:51 PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+05:24:51 PM  all    0.24    0.66    0.40    0.11    0.00    0.01    0.00    0.00    0.00   98.58
+
+Memory Utilization :
+              total        used        free      shared  buff/cache   available
+Mem:           1725         126         845           0         754        1426
+Swap:          1023           0        1023
+
+Disk Space Utilization :
+Filesystem                Size  Used Avail Use% Mounted on
+devtmpfs                  846M     0  846M   0% /dev
+tmpfs                     863M     0  863M   0% /dev/shm
+tmpfs                     863M  504K  863M   1% /run
+tmpfs                     863M     0  863M   0% /sys/fs/cgroup
+/dev/sda1                  19G  6.7G   11G  38% /
+/dev/mapper/vg_00-var_lv   99G   61M   94G   1% /my_var
+/dev/sr1                  8.6G  8.6G     0 100% /mnt/cdrom
+/dev/mapper/vg_00-tmp     394G   73M  374G   1% /tmp
+tmpfs                     173M     0  173M   0% /run/user/0
+
+Active Gateways:
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         10.0.2.2        0.0.0.0         UG        0 0          0 enp0s3
+0.0.0.0         192.168.56.1    0.0.0.0         UG        0 0          0 enp0s8
+10.0.2.0        0.0.0.0         255.255.255.0   U         0 0          0 enp0s3
+192.168.56.0    0.0.0.0         255.255.255.0   U         0 0          0 enp0s8
+
+Attached Devices :
+NAME             MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sdb                8:16   0 500.7G  0 disk
+└─sdb1             8:17   0 500.7G  0 part
+  ├─vg_00-tmp    252:1    0   400G  0 lvm  /tmp
+  └─vg_00-var_lv 252:0    0   100G  0 lvm  /my_var
+sr0               11:0    1  1024M  0 rom
+sda                8:0    0    20G  0 disk
+├─sda2             8:2    0     1G  0 part [SWAP]
+└─sda1             8:1    0    19G  0 part /
+sr1               11:1    1   8.5G  0 rom  /mnt/cdrom
+=============================================================================
+
+=============================================================================
+*                                                                           *
+*                            Server Health Report                           *
+*                                                                           *
+=============================================================================
+Hostname : " 192.168.56.106 "
+OS Type : "RedHat"
+=============================================================================
+Sysyem Uptime :
+ 17:24:29 up  6:20,  1 user,  load average: 0.22, 0.08, 0.08
+
+CUP Utiliztion :
+Linux 4.18.0-477.10.1.el8_8.x86_64 (oradb1)     02/19/2026      _x86_64_        (1 CPU)
+
+05:24:30 PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+05:24:30 PM  all    0.51    0.25    0.38    0.07    0.15    0.05    0.00    0.00    0.00   98.60
+
+Memory Utilization :
+              total        used        free      shared  buff/cache   available
+Mem:           1778         130         811          16         836        1602
+Swap:          1023           0        1023
+
+Disk Space Utilization :
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        871M     0  871M   0% /dev
+tmpfs           890M     0  890M   0% /dev/shm
+tmpfs           890M   17M  873M   2% /run
+tmpfs           890M     0  890M   0% /sys/fs/cgroup
+/dev/sda1        19G   16G  2.3G  88% /
+/dev/sr1         12G   12G     0 100% /mnt/cdrom
+tmpfs           178M     0  178M   0% /run/user/0
+
+Active Gateways:
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+10.10.10.0      0.0.0.0         255.255.255.0   U         0 0          0 enp0s3
+192.168.56.0    0.0.0.0         255.255.255.0   U         0 0          0 enp0s8
+
+Attached Devices :
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk
+├─sda1   8:1    0   19G  0 part /
+└─sda2   8:2    0    1G  0 part [SWAP]
+sr0     11:0    1 1024M  0 rom
+sr1     11:1    1 11.7G  0 rom  /mnt/cdrom
+=============================================================================
