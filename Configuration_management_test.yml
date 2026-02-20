@@ -1,0 +1,19 @@
+---
+- name: Configure Subsystem in sshd_config
+  hosts: all
+  gather_facts: no
+  become: true
+
+  tasks:
+    - name: Update Subsystem configuration
+      lineinfile:
+        path: /etc/sshd_config_tmp
+        regexp: "^Subsystem"
+        line: "This is new Subsystem"
+        backup: yes
+      notify: task_completed
+
+  handlers:
+    - name: task_completed
+      debug:
+        msg: " Task Completed "
