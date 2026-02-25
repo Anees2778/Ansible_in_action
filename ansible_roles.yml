@@ -1,0 +1,66 @@
+apache/
+├── defaults/
+│   └── main.yml
+├── files/
+├── handlers/
+│   └── main.yml
+├── meta/
+│   └── main.yml
+├── tasks/
+│   └── main.yml
+├── templates/
+├── tests/
+├── vars/
+│   └── main.yml
+
+
+========================= Working with ansible-roles ===============================
+[root@LINUX roles]# ls -lrt
+total 24
+-rw-r--r--.  1 root root  415 Feb 15 10:33 delete_user.yml
+-rw-r--r--.  1 root root  448 Feb 15 10:37 user_onboarding_with_sudo.yml
+drwxr-xr-x. 10 root root 4096 Feb 25 03:46 apache
+drwxr-xr-x. 10 root root 4096 Feb 25 03:56 nginx_role
+-rw-r--r--.  1 root root   79 Feb 25 04:00 nginx.yml
+-rw-r--r--.  1 root root   75 Feb 25 04:44 apache_role
+[root@LINUX roles]#
+[root@LINUX roles]#
+[root@LINUX roles]#
+[root@LINUX roles]# ansible-playbook apache_role
+
+PLAY [apache setup] ********************************************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************************************************
+ok: [192.168.56.106]
+ok: [192.168.56.105]
+
+TASK [apache : Disable SElinux] ********************************************************************************************************************
+changed: [192.168.56.105]
+changed: [192.168.56.106]
+
+TASK [apache : check SELinux enforcing state] ******************************************************************************************************
+changed: [192.168.56.105]
+changed: [192.168.56.106]
+
+TASK [apache : print SELinux status] ***************************************************************************************************************
+ok: [192.168.56.105] => {
+    "msg": "Permissive"
+}
+ok: [192.168.56.106] => {
+    "msg": "Permissive"
+}
+
+TASK [apache : Deploy httpd configuration from template] *******************************************************************************************
+ok: [192.168.56.106]
+ok: [192.168.56.105]
+
+TASK [apache : Start and enable httpd] *************************************************************************************************************
+ok: [192.168.56.106]
+ok: [192.168.56.105]
+
+PLAY RECAP *****************************************************************************************************************************************
+192.168.56.105             : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+192.168.56.106             : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[root@LINUX roles]#
+
